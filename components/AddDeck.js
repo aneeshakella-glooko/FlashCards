@@ -18,11 +18,12 @@ class AddDeck extends Component {
       return
     }
 
+    const entry = this.state
     const id = generateUID()
     this.props.dispatch(addDeck(id, this.state.name))
     this.setState(() => ({ name: ''}))
     this.toHome()
-    submitDeck(id, this.state)
+    submitDeck(id, entry)
   }
 
   toHome = () => {

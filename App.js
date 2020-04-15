@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Platform, StatusBar} from 'react-native';
 import Decks from './components/Decks'
 import AddCard from './components/AddCard'
 import AddDeck from './components/AddDeck'
-import {white, purple} from './utils/colors'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
@@ -13,6 +12,7 @@ import reducer from './reducers'
 import middleware from './middlewares'
 import Constants from 'expo-constants';
 import Container from './Container'
+import {white, purple} from './utils/colors'
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (

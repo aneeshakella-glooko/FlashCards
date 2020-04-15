@@ -14,10 +14,17 @@ class Decks extends Component {
   }
 
   componentDidMount () {
-    const { dispatch } = this.props
-
+    const { dispatch} = this.props
+    
+    this.props.navigation.addListener(
+      'didFocus',
+      payload => {
+        this.forceUpdate();
+      }
+    );
     fetchDeckResults()
       .then((decks) => {
+        console.log(decks)
         dispatch(receiveDecks(decks))})
       .then(() => this.setState(() => ({ready: true})))
   }
@@ -25,16 +32,23 @@ class Decks extends Component {
   render() {
     const { decks } = this.props
     const { ready } = this.state
+    console.log(decks)
     if (ready === false) {
         return <AppLoading />
     }
 
-    return (
+    return Object.keys(this.props.decks).length == 0 ?
+    (<View style={styles.container}>
+        <Text style={styles.title}> Please Add Some Decks</Text>
+    </View>
+    )
+    : (
             <View style={styles.container}>
                <FlatList
                  data={Object.keys(this.props.decks)}
                  renderItem={({item}) => <DeckInfo id={item}
                  num={this.props.decks[item].name}
+                 size={Object.keys(this.props.decks[item].cards).length}
                  navigation={this.props.navigation}/>}
                />
              </View>
@@ -70,6 +84,7 @@ function DeckInfo (props) {
             >
       <View style={styles.item}>
         <Text style={styles.title}> {props.num} </Text>
+        <Text style={styles.title}> {props.size} Cards </Text>
       </View>
       </TouchableOpacity>
   )
@@ -77,6 +92,7 @@ function DeckInfo (props) {
 
 
 function mapStateToProps ({decks}) {
+  console.log()
   return {
     decks
   }

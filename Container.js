@@ -4,7 +4,8 @@ import Decks from './components/Decks'
 import AddCard from './components/AddCard'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
-import {white, purple} from './utils/colors'
+import Quiz from './components/Quiz'
+import {white, purple, orange} from './utils/colors'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Provider } from 'react-redux'
@@ -56,6 +57,24 @@ const MainNavigator = createStackNavigator({
   },
   DeckDetail: {
     screen: DeckDetail,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  AddCard: {
+    screen: AddCard,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  Quiz: {
+    screen: Quiz,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {

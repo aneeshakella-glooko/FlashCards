@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchDeckResults } from '../utils/api'
-import {View, FlatList, Text, StyleSheet} from 'react-native'
+import {View, FlatList, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import { AppLoading} from 'expo'
 import Constants from 'expo-constants';
 import { receiveDecks, addEntry } from '../actions'
+import DeckDetail from './DeckDetail'
 
 class Decks extends Component {
 
@@ -24,7 +25,6 @@ class Decks extends Component {
   render() {
     const { decks } = this.props
     const { ready } = this.state
-    console.log(this.props)
     if (ready === false) {
         return <AppLoading />
     }
@@ -33,7 +33,9 @@ class Decks extends Component {
             <View style={styles.container}>
                <FlatList
                  data={Object.keys(this.props.decks)}
-                 renderItem={({item}) => <DeckInfo num={this.props.decks[item].name}/>}
+                 renderItem={({item}) => <DeckInfo id={item}
+                 num={this.props.decks[item].name}
+                 navigation={this.props.navigation}/>}
                />
              </View>
       )
@@ -60,9 +62,16 @@ const styles = StyleSheet.create({
 
 function DeckInfo (props) {
   return (
-    <View style={styles.item}>
-      <Text style={styles.title}> {props.num} </Text>
-    </View>
+      <TouchableOpacity
+              onPress={() => props.navigation.navigate(
+                'DeckDetail',
+                { id: props.id }
+              )}
+            >
+      <View style={styles.item}>
+        <Text style={styles.title}> {props.num} </Text>
+      </View>
+      </TouchableOpacity>
   )
 }
 

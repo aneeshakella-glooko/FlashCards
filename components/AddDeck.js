@@ -15,6 +15,7 @@ class AddDeck extends Component {
    submit = () => {
     if (this.state.name == ''){
       alert("Please Enter Some Text")
+      return
     }
 
     const id = generateUID()

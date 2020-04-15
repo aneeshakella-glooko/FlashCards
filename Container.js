@@ -3,28 +3,30 @@ import { StyleSheet, Text, View, Platform, StatusBar} from 'react-native';
 import Decks from './components/Decks'
 import AddCard from './components/AddCard'
 import AddDeck from './components/AddDeck'
+import DeckDetail from './components/DeckDetail'
 import {white, purple} from './utils/colors'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import reducer from './reducers'
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack'
+import { createAppContainer } from 'react-navigation';
 
 import Constants from 'expo-constants'
 
 const Tabs = createBottomTabNavigator({
-  AddDeck: {
-    screen: AddDeck,
-    navigationOptions: {
-      tabBarLabel: 'History',
-      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
-    },
-  },
   Decks: {
     screen: Decks,
     navigationOptions: {
-      tabBarLabel: 'Add Entry',
+      tabBarLabel: 'Current Decks',
+      tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+    },
+  },
+  AddDeck: {
+    screen: AddDeck,
+    navigationOptions: {
+      tabBarLabel: 'Add Deck',
       tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />
     },
   },
@@ -48,6 +50,22 @@ const Tabs = createBottomTabNavigator({
   }
 })
 
-const Container = createAppContainer(Tabs)
+const MainNavigator = createStackNavigator({
+  Home: {
+    screen: Tabs,
+  },
+  DeckDetail: {
+    screen: DeckDetail,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  }
+})
+
+
+const Container = createAppContainer(MainNavigator)
 
 export default Container

@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
-import { TextInput, Text, Button, View,TouchableOpacity, StyleSheet} from 'react-native';
+import { TextInput, Text, View, TouchableOpacity} from 'react-native';
 import { NavigationActions } from 'react-navigation'
 import {submitDeck} from '../utils/api'
 import { connect } from 'react-redux'
 import generateUID from '../utils/decks'
 import {addCardToDeck} from  '../actions/index'
+import {styles} from '../utils/colors'
 
 class AddCard extends Component {
   state = {
@@ -30,10 +31,6 @@ class AddCard extends Component {
     this.props.curr_deck.cards[card_id] = {question, answer}
     submitDeck(this.props.deck_id, this.props.curr_deck)
   }
-
-
-
-
 
   toHome = () => {
     this.props.navigation.dispatch(NavigationActions.back({key: 'Decks'}))
@@ -72,44 +69,6 @@ class AddCard extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 45,
-    backgroundColor: '#F5FCFF',
-  },
-  header: {
-    fontSize: 25,
-    textAlign: 'center',
-    margin: 10,
-    fontWeight: 'bold'
-  },
-  inputContainer: {
-    paddingTop: 15
-  },
-  textInput: {
-    borderColor: '#CCCCCC',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    height: 50,
-    fontSize: 25,
-    paddingLeft: 20,
-    paddingRight: 20
-  },
-  saveButton: {
-    borderWidth: 1,
-    borderColor: '#007BFF',
-    backgroundColor: '#007BFF',
-    padding: 15,
-    margin: 5
-  },
-  saveButtonText: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    textAlign: 'center'
-  }
-});
 
 
 function mapStateToProps ({decks}, {navigation}) {

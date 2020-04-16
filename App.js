@@ -13,6 +13,8 @@ import middleware from './middlewares'
 import Constants from 'expo-constants';
 import Container from './Container'
 import {white, purple} from './utils/colors'
+import { setLocalNotification } from './utils/helpers'
+
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
@@ -23,6 +25,9 @@ function UdaciStatusBar ({backgroundColor, ...props}) {
 }
 
 export default class App extends Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
 
   render() {
     return (

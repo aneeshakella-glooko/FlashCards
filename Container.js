@@ -33,7 +33,7 @@ const Tabs = createBottomTabNavigator({
   },
 }, {
   navigationOptions: {
-    header: null
+    headerShown: false
   },
   tabBarOptions: {
     activeTintColor: Platform.OS === 'ios' ? purple : white,

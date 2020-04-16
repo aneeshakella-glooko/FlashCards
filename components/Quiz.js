@@ -1,73 +1,90 @@
 import React, {Component} from 'react'
-import {white, purple, orange} from '../utils/colors'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {white, purple, orange, green, red} from '../utils/colors'
+import { View, Text, StyleSheet, TouchableOpacity, Fragment } from 'react-native'
 import { connect } from 'react-redux'
 import { FontAwesome, AntDesign } from '@expo/vector-icons'
 
 class Quiz extends Component {
     state = {
       seeAnswer : false,
-      currCard : 0
-    }
-
-    seeLeft = () => {
-      this.setState(
-        {
-          currCard: this.state.currCard - 1 < 0 ? 0: this.state.currCard - 1,
-          seeAnswer: false
-        } )
-    }
-
-    seeRight = () => {
-      this.setState(
-        {
-          currCard: this.state.currCard + 1 < this.props.card_keys.length ?
-          this.state.currCard + 1: this.state.currCard,
-          seeAnswer: false
-        } )
+      currCard : 0,
+      correct: 0
     }
 
     render () {
-      return Object.keys(this.props.cards).length == 0 ?
-      (<View style={styles.container}>
-          <Text style={styles.header}> You need to add a card to start the quiz</Text>
-      </View>
-      )
-      : (<View style={styles.container}>
 
-        <Text style={styles.header}> {this.state.seeAnswer ?
-          this.props.cards[this.props.card_keys[this.state.currCard]].answer
-           :  this.props.cards[this.props.card_keys[this.state.currCard]].question} </Text>
+      if(this.props.card_keys.length == 0){
+        return (<View style={styles.container}>
+            <Text style={styles.header}> You need to add a card to start the quiz</Text>
+        </View> )
+      }
 
-          <View style={styles.buttonRow}>
+      console.log(this.props.card_keys.length, this.state.currCard)
+      if(this.props.card_keys.length == this.state.currCard){
+        return (<View style={styles.container}>
+            <Text style={styles.header}>
+              You scored {this.state.correct * 100/this.props.card_keys.length}%!
+            </Text>
+        </View> )
+      }
 
-          <AntDesign onClick={this.seeLeft} name='arrowleft' size={100}
-          color={this.state.currCard == 0 ? "transparent" : "blue"}/>
+      return (
+           <View style={styles.container}>
+              <Text style={styles.header}> {this.state.seeAnswer ?
+                this.props.cards[this.props.card_keys[this.state.currCard]].answer
+                : this.props.cards[this.props.card_keys[this.state.currCard]].question
+               }
+              </Text>
 
-            <TouchableOpacity
-              style={styles.startButton}
-              onPress={() => {
-                 this.setState({
-                   seeAnswer: !this.state.seeAnswer
-                 })
-              }
-            }>
+                  <TouchableOpacity
+                    style={styles.startButton}
+                    onPress={() => {
+                       this.setState({
+                         seeAnswer: !this.state.seeAnswer
+                       })}}>
 
-            <Text style={styles.saveButtonText}>{this.state.seeAnswer ?
-                "See Question" : "See Answer" } </Text>
-            </TouchableOpacity>
+                    <Text style={styles.saveButtonText}>{this.state.seeAnswer ?
+                        "See Question" : "See Answer" } </Text>
+                  </TouchableOpacity>
 
-            <AntDesign onClick={this.seeRight} name='arrowright' size={100}
-            color={this.state.currCard == this.props.card_keys.length -1
-               ? "transparent" : "blue"}/>
+            {!this.state.seeAnswer ?
+              (<View>
+              </View>)
+                : (<View>
+                      <TouchableOpacity
+                        style={styles.correctButton}
+                        onPress={() => {
+                           this.setState({
+                             correct: this.state.correct + 1,
+                             currCard: this.state.currCard + 1,
+                             seeAnswer: false
+                           })
+                        }
+                      }>
 
-          </View>
-         </View>
+                        <Text style={styles.saveButtonText}> Correct </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.wrongButton}
+                          onPress={() => {
+                             this.setState({
+                               seeAnswer: false,
+                               currCard: this.state.currCard + 1
+                             })
+                          }
+                        }>
+
+                        <Text style={styles.saveButtonText}> Incorrect </Text>
+                        </TouchableOpacity>
+
+                   </View>
+                )}
+            </View>
         )
     }
-
-
 }
+
 
 
 const styles = StyleSheet.create({
@@ -75,15 +92,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 45,
     backgroundColor: '#F5FCFF',
+    justifyContent: "space-between"
   },
   header: {
     fontSize: 25,
     textAlign: 'center',
     margin: 10,
     fontWeight: 'bold'
-  },
-  inputContainer: {
-    paddingTop: 15
   },
   textInput: {
     borderColor: '#CCCCCC',
@@ -106,13 +121,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center'
   },
-  deleteButton: {
-    borderWidth: 1,
-    borderColor: '#C62033',
-    backgroundColor: '#C62033',
-    padding: 15,
-    margin: 5
-  },
   startButton: {
     borderWidth: 1,
     borderColor: '#C62033',
@@ -120,14 +128,21 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 5
   },
-  buttonRow: {
-    marginTop: 100,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    align: 'center'
-  }
+  correctButton: {
+    borderWidth: 1,
+    borderColor: '#C62033',
+    backgroundColor: green,
+    padding: 15,
+    margin: 5
+  },
+  wrongButton: {
+    borderWidth: 1,
+    borderColor: '#C62033',
+    backgroundColor: red,
+    padding: 15,
+    margin: 5
+  },
 });
-
 
 function mapStateToProps ({decks}, {navigation}) {
   const { deck_id } = navigation.state.params
